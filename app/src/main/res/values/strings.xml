@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kids English Songs</string>
+    <string name="play">播放</string>
+    <string name="pause">暂停</string>
+    <string name="next">下一首</string>
+    <string name="previous">上一首</string>
+    <string name="shuffle">随机播放</string>
+    <string name="repeat">循环模式</string>
+    <string name="favorite">收藏</string>
+    <string name="unfavorite">取消收藏</string>
+    <string name="library">歌曲库</string>
+    <string name="playlist">播放列表</string>
+    <string name="settings">设置</string>
+    <string name="parent_control">家长控制</string>
+    <string name="import_songs">导入歌曲</string>
+    <string name="create_group">创建分组</string>
+    <string name="create_tag">创建标签</string>
+    <string name="search">搜索</string>
+    <string name="sleep_timer">睡眠定时器</string>
+    <string name="no_songs">还没有歌曲，点击导入按钮添加歌曲</string>
+    <string name="parent_verification">家长验证</string>
+    <string name="verification_hint">请计算以下算式：</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="delete_confirm">确认删除</string>
+    <string name="delete_song_confirm">确定要删除这首歌吗？</string>
+    <string name="play_count">播放 %d 次</string>
+    <string name="duration_format">%02d:%02d</string>
+</resources>

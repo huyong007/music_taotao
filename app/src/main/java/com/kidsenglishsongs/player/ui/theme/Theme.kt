@@ -1,0 +1,81 @@
+package com.kidsenglishsongs.player.ui.theme
+
+import android.app.Activity
+import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
+
+// 儿童友好的圆角设计
+val KidsShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(32.dp)
+)
+
+// 亮色主题配色方案
+private val LightColorScheme = lightColorScheme(
+    primary = Primary,
+    onPrimary = OnPrimary,
+    primaryContainer = PrimaryLight,
+    onPrimaryContainer = PrimaryDark,
+    
+    secondary = Secondary,
+    onSecondary = OnSecondary,
+    secondaryContainer = SecondaryLight,
+    onSecondaryContainer = SecondaryDark,
+    
+    tertiary = Accent,
+    onTertiary = OnPrimary,
+    tertiaryContainer = AccentLight,
+    onTertiaryContainer = AccentDark,
+    
+    error = Error,
+    onError = OnError,
+    errorContainer = ErrorLight,
+    onErrorContainer = ErrorDark,
+    
+    background = Background,
+    onBackground = OnBackground,
+    
+    surface = Surface,
+    onSurface = OnSurface,
+    surfaceVariant = SurfaceVariant,
+    onSurfaceVariant = OnSurfaceVariant,
+    
+    outline = OnSurfaceVariant,
+    outlineVariant = SurfaceVariant
+)
+
+@Composable
+fun KidsEnglishSongsTheme(
+    content: @Composable () -> Unit
+) {
+    val colorScheme = LightColorScheme // 始终使用亮色主题，对儿童更友好
+    
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+        }
+    }
+    
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        shapes = KidsShapes,
+        content = content
+    )
+}
