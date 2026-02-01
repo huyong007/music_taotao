@@ -6,7 +6,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 
-// 儿童友好的圆角设计
-val KidsShapes = Shapes(
+// 圆角设计
+val AppShapes = Shapes(
     extraSmall = RoundedCornerShape(8.dp),
     small = RoundedCornerShape(12.dp),
     medium = RoundedCornerShape(16.dp),
@@ -23,27 +23,27 @@ val KidsShapes = Shapes(
     extraLarge = RoundedCornerShape(32.dp)
 )
 
-// 亮色主题配色方案
-private val LightColorScheme = lightColorScheme(
+// 网易云风格深色主题配色方案
+private val DarkColorScheme = darkColorScheme(
     primary = Primary,
     onPrimary = OnPrimary,
-    primaryContainer = PrimaryLight,
-    onPrimaryContainer = PrimaryDark,
+    primaryContainer = PrimaryDark,
+    onPrimaryContainer = OnPrimary,
     
     secondary = Secondary,
     onSecondary = OnSecondary,
     secondaryContainer = SecondaryLight,
-    onSecondaryContainer = SecondaryDark,
+    onSecondaryContainer = OnSecondary,
     
     tertiary = Accent,
     onTertiary = OnPrimary,
-    tertiaryContainer = AccentLight,
-    onTertiaryContainer = AccentDark,
+    tertiaryContainer = AccentDark,
+    onTertiaryContainer = OnPrimary,
     
     error = Error,
     onError = OnError,
-    errorContainer = ErrorLight,
-    onErrorContainer = ErrorDark,
+    errorContainer = ErrorDark,
+    onErrorContainer = OnError,
     
     background = Background,
     onBackground = OnBackground,
@@ -61,13 +61,13 @@ private val LightColorScheme = lightColorScheme(
 fun KidsEnglishSongsTheme(
     content: @Composable () -> Unit
 ) {
-    val colorScheme = LightColorScheme // 始终使用亮色主题，对儿童更友好
+    val colorScheme = DarkColorScheme // 使用网易云风格深色主题
     
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = Background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
@@ -75,7 +75,7 @@ fun KidsEnglishSongsTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        shapes = KidsShapes,
+        shapes = AppShapes,
         content = content
     )
 }

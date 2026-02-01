@@ -23,7 +23,7 @@ import com.kidsenglishsongs.player.ui.theme.*
 import java.io.File
 
 /**
- * 歌曲卡片组件 - 用于在列表中展示歌曲
+ * 歌曲卡片组件 - 网易云风格
  */
 @Composable
 fun SongCard(
@@ -37,11 +37,11 @@ fun SongCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isPlaying) PrimaryLight.copy(alpha = 0.3f) else Surface
+            containerColor = if (isPlaying) Primary.copy(alpha = 0.15f) else Surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier
@@ -52,13 +52,9 @@ fun SongCard(
             // 封面图片
             Box(
                 modifier = Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(Primary, PrimaryLight)
-                        )
-                    ),
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(SurfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
                 if (song.coverPath != null) {
@@ -72,8 +68,8 @@ fun SongCard(
                     Icon(
                         imageVector = Icons.Default.MusicNote,
                         contentDescription = null,
-                        modifier = Modifier.size(32.dp),
-                        tint = OnPrimary
+                        modifier = Modifier.size(28.dp),
+                        tint = OnSurfaceVariant
                     )
                 }
             }
@@ -130,7 +126,7 @@ fun SongCard(
 }
 
 /**
- * 大尺寸歌曲卡片 - 用于儿童模式的网格展示
+ * 大尺寸歌曲卡片 - 网易云风格网格展示
  */
 @Composable
 fun LargeSongCard(
@@ -143,16 +139,16 @@ fun LargeSongCard(
         modifier = modifier
             .aspectRatio(1f)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isPlaying) PrimaryLight.copy(alpha = 0.3f) else Surface
+            containerColor = if (isPlaying) Primary.copy(alpha = 0.15f) else Surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -161,12 +157,8 @@ fun LargeSongCard(
                 modifier = Modifier
                     .weight(1f)
                     .aspectRatio(1f)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(Primary, PrimaryLight)
-                        )
-                    ),
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(SurfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
                 if (song.coverPath != null) {
@@ -180,8 +172,8 @@ fun LargeSongCard(
                     Icon(
                         imageVector = Icons.Default.MusicNote,
                         contentDescription = null,
-                        modifier = Modifier.size(48.dp),
-                        tint = OnPrimary
+                        modifier = Modifier.size(40.dp),
+                        tint = OnSurfaceVariant
                     )
                 }
             }

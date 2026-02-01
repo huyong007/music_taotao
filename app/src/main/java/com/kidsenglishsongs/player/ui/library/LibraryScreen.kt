@@ -22,7 +22,7 @@ import com.kidsenglishsongs.player.ui.components.*
 import com.kidsenglishsongs.player.ui.theme.*
 
 /**
- * 歌曲库界面
+ * 歌曲库界面 - 网易云风格
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +50,7 @@ fun LibraryScreen(
     }
     
     Scaffold(
+        containerColor = Background,
         topBar = {
             TopAppBar(
                 title = { Text("歌曲库") },
@@ -69,10 +70,10 @@ fun LibraryScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Primary,
-                    titleContentColor = OnPrimary,
-                    navigationIconContentColor = OnPrimary,
-                    actionIconContentColor = OnPrimary
+                    containerColor = Background,
+                    titleContentColor = OnBackground,
+                    navigationIconContentColor = OnBackground,
+                    actionIconContentColor = OnBackground
                 )
             )
         },
@@ -81,8 +82,8 @@ fun LibraryScreen(
                 onClick = {
                     filePickerLauncher.launch(arrayOf("audio/*"))
                 },
-                containerColor = Secondary,
-                contentColor = OnSecondary
+                containerColor = Primary,
+                contentColor = OnPrimary
             ) {
                 Icon(Icons.Default.Add, contentDescription = "导入歌曲")
             }

@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.kidsenglishsongs.player.ui.theme.*
 
 /**
- * 设置界面
+ * 设置界面 - 网易云风格
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,6 +22,7 @@ fun SettingsScreen(
     onNavigateToImportMusic: () -> Unit = {}
 ) {
     Scaffold(
+        containerColor = Background,
         topBar = {
             TopAppBar(
                 title = { Text("设置") },
@@ -31,9 +32,9 @@ fun SettingsScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Primary,
-                    titleContentColor = OnPrimary,
-                    navigationIconContentColor = OnPrimary
+                    containerColor = Background,
+                    titleContentColor = OnBackground,
+                    navigationIconContentColor = OnBackground
                 )
             )
         }
@@ -173,7 +174,10 @@ private fun SettingsItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = Surface
+        )
     ) {
         Row(
             modifier = Modifier

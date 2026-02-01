@@ -88,6 +88,7 @@ fun ImportMusicScreen(
     }
     
     Scaffold(
+        containerColor = Background,
         topBar = {
             TopAppBar(
                 title = { Text("导入音乐") },
@@ -109,10 +110,10 @@ fun ImportMusicScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Primary,
-                    titleContentColor = OnPrimary,
-                    navigationIconContentColor = OnPrimary,
-                    actionIconContentColor = OnPrimary
+                    containerColor = Background,
+                    titleContentColor = OnBackground,
+                    navigationIconContentColor = OnBackground,
+                    actionIconContentColor = OnBackground
                 )
             )
         },
@@ -123,6 +124,7 @@ fun ImportMusicScreen(
             ) {
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
+                    color = Surface,
                     shadowElevation = 8.dp
                 ) {
                     Row(
@@ -134,13 +136,14 @@ fun ImportMusicScreen(
                     ) {
                         Text(
                             text = "已选择 ${selectedIds.size} 首",
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = OnSurface
                         )
                         
                         Button(
                             onClick = { viewModel.importSelectedSongs() },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Secondary
+                                containerColor = Primary
                             )
                         ) {
                             Icon(Icons.Default.Download, contentDescription = null)
