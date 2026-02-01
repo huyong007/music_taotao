@@ -74,3 +74,7 @@ lint/tmp/
 
 # Mac
 .DS_Store
+
+# 签名密钥（勿提交）
+release-key.jks
+*.keystore
