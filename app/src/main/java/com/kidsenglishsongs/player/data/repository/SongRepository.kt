@@ -97,4 +97,11 @@ class SongRepository @Inject constructor(
     suspend fun getTotalDuration(): Long = songDao.getTotalDuration() ?: 0L
     
     suspend fun getTotalPlayCount(): Int = songDao.getTotalPlayCount() ?: 0
+    
+    // 文件哈希去重相关
+    suspend fun getSongByHash(hash: String): SongEntity? = songDao.getSongByHash(hash)
+    
+    suspend fun getAllFileHashes(): List<String> = songDao.getAllFileHashes()
+    
+    suspend fun existsByHash(hash: String): Boolean = songDao.existsByHash(hash)
 }

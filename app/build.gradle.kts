@@ -88,6 +88,9 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
     
+    // DocumentFile (for folder access)
+    implementation("androidx.documentfile:documentfile:1.0.1")
+    
     // Testing
     testImplementation(libs.junit)
     testImplementation("org.mockito:mockito-core:5.8.0")

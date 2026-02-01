@@ -18,7 +18,8 @@ import com.kidsenglishsongs.player.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToImportMusic: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -44,6 +45,25 @@ fun SettingsScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // 音乐管理
+            item {
+                Text(
+                    text = "音乐管理",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Primary,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+            
+            item {
+                SettingsItem(
+                    icon = Icons.Default.LibraryMusic,
+                    title = "导入音乐",
+                    subtitle = "从本机扫描或选择文件夹导入",
+                    onClick = onNavigateToImportMusic
+                )
+            }
+            
             // 播放设置
             item {
                 Text(

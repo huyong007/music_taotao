@@ -1,12 +1,16 @@
 package com.kidsenglishsongs.player.data.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * 歌曲实体
  */
-@Entity(tableName = "songs")
+@Entity(
+    tableName = "songs",
+    indices = [Index(value = ["fileHash"], unique = true)]
+)
 data class SongEntity(
     @PrimaryKey val id: String,           // UUID
     val title: String,                     // 歌曲名称
@@ -18,5 +22,9 @@ data class SongEntity(
     val isFavorite: Boolean = false,       // 是否收藏
     val groupId: String? = null,           // 所属分组ID
     val createdAt: Long,                   // 添加时间
-    val lastPlayedAt: Long? = null         // 最后播放时间
+    val lastPlayedAt: Long? = null,        // 最后播放时间
+    val fileHash: String? = null,          // 文件MD5哈希，用于去重
+    val artist: String? = null,            // 艺术家
+    val album: String? = null,             // 专辑
+    val fileSize: Long = 0                 // 文件大小（字节）
 )

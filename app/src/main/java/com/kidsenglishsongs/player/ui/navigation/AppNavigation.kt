@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kidsenglishsongs.player.ui.library.LibraryScreen
 import com.kidsenglishsongs.player.ui.parent.ParentControlScreen
 import com.kidsenglishsongs.player.ui.player.PlayerScreen
+import com.kidsenglishsongs.player.ui.settings.ImportMusicScreen
 import com.kidsenglishsongs.player.ui.settings.SettingsScreen
 
 /**
@@ -19,6 +20,7 @@ object Routes {
     const val SETTINGS = "settings"
     const val PARENT_CONTROL = "parent_control"
     const val PLAYLIST = "playlist"
+    const val IMPORT_MUSIC = "import_music"
 }
 
 /**
@@ -62,6 +64,9 @@ fun AppNavigation(
             SettingsScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onNavigateToImportMusic = {
+                    navController.navigate(Routes.IMPORT_MUSIC)
                 }
             )
         }
@@ -69,6 +74,15 @@ fun AppNavigation(
         // 家长控制界面
         composable(Routes.PARENT_CONTROL) {
             ParentControlScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        
+        // 导入音乐界面
+        composable(Routes.IMPORT_MUSIC) {
+            ImportMusicScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 }

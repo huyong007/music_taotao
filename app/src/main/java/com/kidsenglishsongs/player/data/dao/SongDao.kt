@@ -85,4 +85,16 @@ interface SongDao {
     
     @Query("SELECT SUM(playCount) FROM songs")
     suspend fun getTotalPlayCount(): Int?
+    
+    // 通过文件哈希检查是否已存在
+    @Query("SELECT * FROM songs WHERE fileHash = :hash LIMIT 1")
+    suspend fun getSongByHash(hash: String): SongEntity?
+    
+    // 获取所有已存在的文件哈希
+    @Query("SELECT fileHash FROM songs WHERE fileHash IS NOT NULL")
+    suspend fun getAllFileHashes(): List<String>
+    
+    // 检查哈希是否存在
+    @Query("SELECT EXISTS(SELECT 1 FROM songs WHERE fileHash = :hash)")
+    suspend fun existsByHash(hash: String): Boolean
 }

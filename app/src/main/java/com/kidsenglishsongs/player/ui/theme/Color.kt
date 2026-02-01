@@ -27,6 +27,16 @@ val Error = Color(0xFFEF5350)
 val ErrorLight = Color(0xFFFF867C)
 val ErrorDark = Color(0xFFB61827)
 
+// 警告色
+val Warning = Color(0xFFFF9800)
+val WarningLight = Color(0xFFFFCC80)
+val WarningDark = Color(0xFFF57C00)
+
+// 成功色
+val Success = Color(0xFF4CAF50)
+val SuccessLight = Color(0xFFA5D6A7)
+val SuccessDark = Color(0xFF388E3C)
+
 // 文本色
 val OnPrimary = Color.White
 val OnSecondary = Color.Black
