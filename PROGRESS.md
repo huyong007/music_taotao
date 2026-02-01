@@ -20,7 +20,199 @@
 | 调试文档 | ✅ 完成 | 100% |
 | **编译验证** | ✅ 完成 | 100% |
 | **单元测试运行** | ✅ 完成 | 100% |
+| **APK 构建** | ✅ 完成 | 100% |
 | **真机测试** | ⏳ 待进行 | 0% |
+
+---
+
+## 🎯 已完成里程碑
+
+### 2026年2月1日
+- ✅ 修复所有编译错误
+- ✅ 88 个单元测试全部通过
+- ✅ 成功构建 Debug APK (20MB)
+- ✅ 代码已提交到 Git
+
+---
+
+## 🔧 环境配置记录
+
+### 已安装的开发工具
+| 工具 | 版本 | 安装方式 |
+|------|------|----------|
+| Homebrew | 4.3.0+ | 官方脚本 (GitHub 克隆) |
+| JDK | 17.0.13 (Eclipse Adoptium) | 手动下载安装 |
+| Gradle | 8.5 | 腾讯云镜像下载 |
+| Android SDK | 34 | sdkmanager 安装 |
+| Build Tools | 34.0.0 | sdkmanager 安装 |
+| Platform Tools | 最新版 | sdkmanager 安装 |
+
+### 环境变量配置 (~/.zshrc)
+```bash
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+export ANDROID_HOME=~/Library/Android/sdk
+export PATH="/opt/gradle/gradle-8.5/bin:$PATH"
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+```
+
+---
+
+## ⚠️ 遇到的问题与解决方案
+
+### 1. Homebrew 安装问题
+**问题**: 旧版 Homebrew (2019年) 无法更新，出现 shallow clone 错误
+```
+homebrew-core is a shallow clone.
+homebrew-cask is a shallow clone.
+```
+
+**解决方案**: 
+1. 卸载旧版 Homebrew
+2. 直接从 GitHub 克隆最新版到 `/usr/local/Homebrew`
+3. 配置中科大镜像源加速
+
+---
+
+### 2. Gradle 下载超时
+**问题**: 国内网络访问 GitHub/Gradle 官网超时
+
+**解决方案**: 使用腾讯云镜像
+```bash
+curl -L -o /tmp/gradle.zip "https://mirrors.cloud.tencent.com/gradle/gradle-8.5-bin.zip"
+```
+
+---
+
+### 3. JDK 版本不兼容
+**问题**: 系统自带 JDK 13，Android Gradle Plugin 需要 JDK 17+
+```
+SDK location not found. Define a valid SDK location with an ANDROID_HOME environment variable
+```
+
+**解决方案**: 
+1. 从 Adoptium 下载 JDK 17
+2. 安装到 `/Library/Java/JavaVirtualMachines/`
+3. 配置 `JAVA_HOME` 环境变量
+
+---
+
+### 4. AndroidX 未启用
+**问题**: 编译报错 `android.useAndroidX` property is not enabled
+
+**解决方案**: 创建 `gradle.properties` 文件
+```properties
+android.useAndroidX=true
+android.nonTransitiveRClass=true
+```
+
+---
+
+### 5. Mockito 与 Kotlin 协程不兼容
+**问题**: 单元测试中 suspend 函数 mock 失败
+```
+Suspend function should be called only from a coroutine
+InvalidUseOfMatchersException
+```
+
+**解决方案**:
+1. 添加 `mockito-kotlin` 依赖
+2. 使用 `whenever()` 替代 `when()`
+3. 使用 `doReturn` 和 `onBlocking` 处理 suspend 函数
+
+```kotlin
+// 错误写法
+`when`(repository.getSongCount()).thenReturn(1)
+
+// 正确写法
+songRepository = mock {
+    onBlocking { getSongCount() } doReturn 1
+}
+```
+
+---
+
+### 6. 模拟器启动极慢/offline
+**问题**: x86_64 模拟器在 Intel Mac 上启动非常慢，一直显示 offline
+```
+List of devices attached
+emulator-5554   offline
+```
+
+**可能原因**:
+- 第一次启动使用了 `-wipe-data`，需要完整初始化系统
+- 模拟器冷启动时间长（文档说可能需要 2+ 分钟）
+- 出现 `IMKClient Stall detected` 兼容性警告
+
+**解决方案**: 
+- 等待更长时间（5-10分钟）
+- 或者使用真机调试（推荐）
+- 下次启动不用 `-wipe-data`
+
+---
+
+### 7. Package Manager 服务不可用
+**问题**: 设备虽然显示 `device`，但无法安装 APK
+```
+Error: Could not access the Package Manager
+```
+
+**原因**: Android 系统服务还未完全启动（boot animation 仍在运行）
+
+**解决方案**: 等待 `sys.boot_completed=1`
+```bash
+adb shell getprop sys.boot_completed
+# 返回 1 时表示启动完成
+```
+
+---
+
+## 📁 构建产物
+
+| 文件 | 路径 | 大小 |
+|------|------|------|
+| Debug APK | `app/build/outputs/apk/debug/app-debug.apk` | ~20MB |
+
+---
+
+## 📱 真机调试步骤
+
+### 前提条件
+1. Android 手机（Android 8.0+，推荐 Android 10+）
+2. USB 数据线
+
+### 步骤
+1. **开启开发者选项**: 设置 > 关于手机 > 连续点击版本号 7 次
+2. **开启 USB 调试**: 开发者选项 > USB 调试
+3. **连接手机**: USB 连接后允许调试授权
+4. **验证连接**: `adb devices` 看到设备
+5. **安装 APK**: `adb install app/build/outputs/apk/debug/app-debug.apk`
+
+---
+
+## 🚀 常用命令
+
+```bash
+# 编译项目
+./gradlew assembleDebug
+
+# 运行单元测试
+./gradlew test
+
+# 查看连接设备
+adb devices
+
+# 安装 APK
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+
+# 启动应用
+adb shell am start -n com.kidsenglishsongs.player/.MainActivity
+
+# 查看日志
+adb logcat | grep -i "kidsenglish"
+
+# 卸载应用
+adb uninstall com.kidsenglishsongs.player
+```
 
 ---
 
