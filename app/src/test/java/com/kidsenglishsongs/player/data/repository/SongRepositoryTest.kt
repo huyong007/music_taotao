@@ -9,18 +9,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.*
-import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.*
 
 class SongRepositoryTest {
 
-    @Mock
     private lateinit var songDao: SongDao
-
-    @Mock
     private lateinit var playHistoryDao: PlayHistoryDao
-
     private lateinit var songRepository: SongRepository
 
     private val testSong = SongEntity(
@@ -44,13 +38,14 @@ class SongRepositoryTest {
 
     @Before
     fun setup() {
-        MockitoAnnotations.openMocks(this)
+        songDao = mock()
+        playHistoryDao = mock()
         songRepository = SongRepository(songDao, playHistoryDao)
     }
 
     @Test
     fun `getAllSongs returns all songs from dao`() = runTest {
-        `when`(songDao.getAllSongs()).thenReturn(flowOf(testSongs))
+        whenever(songDao.getAllSongs()).thenReturn(flowOf(testSongs))
 
         val result = songRepository.getAllSongs().first()
 
@@ -61,7 +56,7 @@ class SongRepositoryTest {
 
     @Test
     fun `getSongById returns correct song`() = runTest {
-        `when`(songDao.getSongById("test-id-1")).thenReturn(testSong)
+        whenever(songDao.getSongById("test-id-1")).thenReturn(testSong)
 
         val result = songRepository.getSongById("test-id-1")
 
@@ -72,7 +67,7 @@ class SongRepositoryTest {
 
     @Test
     fun `getSongById returns null for non-existent id`() = runTest {
-        `when`(songDao.getSongById("non-existent")).thenReturn(null)
+        whenever(songDao.getSongById("non-existent")).thenReturn(null)
 
         val result = songRepository.getSongById("non-existent")
 
@@ -103,7 +98,7 @@ class SongRepositoryTest {
     @Test
     fun `toggleFavorite toggles favorite status`() = runTest {
         val songNotFavorite = testSong.copy(isFavorite = false)
-        `when`(songDao.getSongById("test-id-1")).thenReturn(songNotFavorite)
+        whenever(songDao.getSongById("test-id-1")).thenReturn(songNotFavorite)
 
         songRepository.toggleFavorite("test-id-1")
 
@@ -113,7 +108,7 @@ class SongRepositoryTest {
     @Test
     fun `toggleFavorite unfavorites when already favorite`() = runTest {
         val songFavorite = testSong.copy(isFavorite = true)
-        `when`(songDao.getSongById("test-id-1")).thenReturn(songFavorite)
+        whenever(songDao.getSongById("test-id-1")).thenReturn(songFavorite)
 
         songRepository.toggleFavorite("test-id-1")
 
@@ -123,7 +118,7 @@ class SongRepositoryTest {
     @Test
     fun `getFavoriteSongs returns only favorite songs`() = runTest {
         val favoriteSongs = listOf(testSong.copy(isFavorite = true))
-        `when`(songDao.getFavoriteSongs()).thenReturn(flowOf(favoriteSongs))
+        whenever(songDao.getFavoriteSongs()).thenReturn(flowOf(favoriteSongs))
 
         val result = songRepository.getFavoriteSongs().first()
 
@@ -133,7 +128,7 @@ class SongRepositoryTest {
 
     @Test
     fun `searchSongs returns matching songs`() = runTest {
-        `when`(songDao.searchSongs("Test")).thenReturn(flowOf(listOf(testSong)))
+        whenever(songDao.searchSongs("Test")).thenReturn(flowOf(listOf(testSong)))
 
         val result = songRepository.searchSongs("Test").first()
 
@@ -144,7 +139,7 @@ class SongRepositoryTest {
     @Test
     fun `getSongsByGroup returns songs in group`() = runTest {
         val songsInGroup = listOf(testSong.copy(groupId = "group-1"))
-        `when`(songDao.getSongsByGroup("group-1")).thenReturn(flowOf(songsInGroup))
+        whenever(songDao.getSongsByGroup("group-1")).thenReturn(flowOf(songsInGroup))
 
         val result = songRepository.getSongsByGroup("group-1").first()
 
@@ -156,7 +151,7 @@ class SongRepositoryTest {
     fun `recordPlay increments play count and records history`() = runTest {
         songRepository.recordPlay("test-id-1", 60000L)
 
-        verify(songDao).incrementPlayCount(eq("test-id-1"), anyLong())
+        verify(songDao).incrementPlayCount(eq("test-id-1"), any())
         verify(playHistoryDao).insertPlayHistory(any())
     }
 
@@ -169,7 +164,7 @@ class SongRepositoryTest {
 
     @Test
     fun `getSongCount returns correct count`() = runTest {
-        `when`(songDao.getSongCount()).thenReturn(5)
+        whenever(songDao.getSongCount()).thenReturn(5)
 
         val count = songRepository.getSongCount()
 
@@ -178,10 +173,41 @@ class SongRepositoryTest {
 
     @Test
     fun `getTotalDuration returns sum of all durations`() = runTest {
-        `when`(songDao.getTotalDuration()).thenReturn(600000L)
+        whenever(songDao.getTotalDuration()).thenReturn(420000L)
 
         val duration = songRepository.getTotalDuration()
 
-        assertEquals(600000L, duration)
+        assertEquals(420000L, duration)
+    }
+
+    @Test
+    fun `getTotalPlayCount returns sum of all play counts`() = runTest {
+        whenever(songDao.getTotalPlayCount()).thenReturn(15)
+
+        val playCount = songRepository.getTotalPlayCount()
+
+        assertEquals(15, playCount)
+    }
+
+    @Test
+    fun `getRecentlyPlayedSongs returns songs ordered by last played`() = runTest {
+        val recentSongs = listOf(testSong.copy(lastPlayedAt = System.currentTimeMillis()))
+        whenever(songDao.getRecentlyPlayedSongs(5)).thenReturn(flowOf(recentSongs))
+
+        val result = songRepository.getRecentlyPlayedSongs(5).first()
+
+        assertEquals(1, result.size)
+        assertNotNull(result[0].lastPlayedAt)
+    }
+
+    @Test
+    fun `getMostPlayedSongs returns songs ordered by play count`() = runTest {
+        val popularSongs = listOf(testSong.copy(playCount = 100))
+        whenever(songDao.getMostPlayedSongs(5)).thenReturn(flowOf(popularSongs))
+
+        val result = songRepository.getMostPlayedSongs(5).first()
+
+        assertEquals(1, result.size)
+        assertEquals(100, result[0].playCount)
     }
 }
